@@ -8,7 +8,7 @@ pub struct InvoiceAttested {
     pub attestor: Pubkey,
 }
 
-pub fn attest_invoice(ctx: Context<AttestInvoice>, attestor_sig: [u8; 64]) -> Result<()> {
+pub fn attest_invoice_fn(ctx: Context<AttestInvoice>, attestor_sig: [u8; 64]) -> Result<()> {
     let invoice = &mut ctx.accounts.invoice;
 
     require!(

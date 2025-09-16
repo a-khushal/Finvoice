@@ -1,6 +1,6 @@
-use anchor_lang::prelude::*;
 use crate::error::FinvoiceError;
-use crate::state::{Invoice, InvoiceStatus};
+use crate::state::{Invoice, InvoiceStatus, Listing};
+use anchor_lang::prelude::*;
 
 #[event]
 pub struct InvoiceListed {
@@ -10,7 +10,7 @@ pub struct InvoiceListed {
     pub expiry: i64,
 }
 
-pub fn list_invoice(ctx: Context<ListInvoice>, price: u64, expiry: i64) -> Result<()> {
+pub fn list_invoice_fn(ctx: Context<ListInvoice>, price: u64, expiry: i64) -> Result<()> {
     let invoice = &mut ctx.accounts.invoice;
 
     require!(
@@ -49,8 +49,14 @@ pub fn list_invoice(ctx: Context<ListInvoice>, price: u64, expiry: i64) -> Resul
 pub struct ListInvoice<'info> {
     #[account(mut)]
     pub issuer: Signer<'info>,
-    #[account(mut, seeds = [b"invoice", invoice.issuer.as_ref(), invoice.mint_pubkey.as_ref()], bump)]
+
+    #[account(
+        mut,
+        seeds = [b"invoice", invoice.issuer.as_ref(), invoice.mint_pubkey.as_ref()],
+        bump
+    )]
     pub invoice: Account<'info, Invoice>,
+
     #[account(
         init,
         payer = issuer,
@@ -59,5 +65,6 @@ pub struct ListInvoice<'info> {
         bump
     )]
     pub listing: Account<'info, Listing>,
+
     pub system_program: Program<'info, System>,
 }

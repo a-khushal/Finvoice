@@ -11,7 +11,7 @@ pub struct InvoiceCreated {
     pub due_date: i64,
 }
 
-pub fn initialize_invoice(
+pub fn initialize_invoice_fn(
     ctx: Context<InitializeInvoice>,
     payer: Option<Pubkey>,
     invoice_amount: u64,
@@ -58,7 +58,7 @@ pub fn initialize_invoice(
 pub struct InitializeInvoice<'info> {
     #[account(mut)]
     pub issuer: Signer<'info>,
-    /// CHECK: metadata handled off-chain; mint authority expected to be issuer or PDA
+
     pub invoice_mint: Account<'info, Mint>,
     #[account(
         init,
@@ -68,7 +68,7 @@ pub struct InitializeInvoice<'info> {
         bump
     )]
     pub invoice: Account<'info, Invoice>,
-    /// CHECK: PDA that may hold SOL escrow
+
     #[account(mut)]
     pub escrow_vault: UncheckedAccount<'info>,
     pub system_program: Program<'info, System>,
