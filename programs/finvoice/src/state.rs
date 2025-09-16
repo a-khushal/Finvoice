@@ -25,6 +25,7 @@ pub struct Listing {
     pub price: u64,
     pub expiry: i64,
     pub seller: Pubkey,
+    pub bump: u8,
 }
 
 impl Listing {

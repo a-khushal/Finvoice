@@ -10,7 +10,7 @@ pub struct InvoiceListed {
     pub expiry: i64,
 }
 
-pub fn list_invoice_fn(ctx: Context<ListInvoice>, price: u64, expiry: i64) -> Result<()> {
+pub fn list_invoice_fn(ctx: Context<ListInvoice>, price: u64, expiry: i64, bump: u8) -> Result<()> {
     let invoice = &mut ctx.accounts.invoice;
 
     require!(
@@ -32,6 +32,7 @@ pub fn list_invoice_fn(ctx: Context<ListInvoice>, price: u64, expiry: i64) -> Re
     listing.price = price;
     listing.expiry = expiry;
     listing.seller = ctx.accounts.issuer.key();
+    listing.bump = bump;
 
     invoice.status = InvoiceStatus::Listed as u8;
 

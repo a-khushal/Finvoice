@@ -14,4 +14,8 @@ pub enum FinvoiceError {
     InvalidDueDate,
     #[msg("Issuer signature is required.")]
     MissingIssuerSignature,
+    #[msg("Buyer cannot be the same as the issuer.")]
+    InvalidBuyer,
+    #[msg("Missing payment token account.")]
+    MissingPaymentAccount,
 }
