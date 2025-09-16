@@ -69,6 +69,9 @@ pub struct InitializeInvoice<'info> {
     )]
     pub invoice: Account<'info, Invoice>,
 
+    /// CHECK: Escrow vault is a PDA used to hold SOL; we only transfer lamports
+    /// and never read/write structured data. Safety is enforced via signer seeds
+    /// during invoke_signed.
     #[account(mut)]
     pub escrow_vault: UncheckedAccount<'info>,
     pub system_program: Program<'info, System>,
