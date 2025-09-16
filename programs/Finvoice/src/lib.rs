@@ -9,22 +9,16 @@ declare_id!("58mxSPUZ18AGWQqM7oYgYx4nhHW3noknPpCQjdTNykDp");
 #[program]
 pub mod finvoice {
     use super::*;
-    use crate::instructions::{
-        initialize_invoice::{self, InitializeInvoice},
-        attest_invoice::{self, AttestInvoice},
-        list_invoice::{self, ListInvoice},
-        mark_default::{self, MarkDefault},
-    };
 
     pub fn initialize_invoice(
-        ctx: Context<InitializeInvoice>,
+        ctx: Context<instructions::initialize_invoice::InitializeInvoice>,
         payer: Option<Pubkey>,
         invoice_amount: u64,
         currency: u16,
         due_date: i64,
         ipfs_cid: [u8; 46],
     ) -> Result<()> {
-        initialize_invoice::initialize_invoice(
+        instructions::initialize_invoice::initialize_invoice(
             ctx,
             payer,
             invoice_amount,
@@ -35,24 +29,24 @@ pub mod finvoice {
     }
 
     pub fn attest_invoice(
-        ctx: Context<AttestInvoice>,
+        ctx: Context<instructions::attest_invoice::AttestInvoice>,
         attestor_sig: [u8; 64]
     ) -> Result<()> {
-        attest_invoice::attest_invoice(ctx, attestor_sig)
+        instructions::attest_invoice::attest_invoice(ctx, attestor_sig)
     }
 
     pub fn list_invoice(
-        ctx: Context<ListInvoice>, 
+        ctx: Context<instructions::list_invoice::ListInvoice>, 
         price: u64, 
         expiry: i64
     ) -> Result<()> {
-        list_invoice::list_invoice(ctx, price, expiry)
+        instructions::list_invoice::list_invoice(ctx, price, expiry)
     }
 
     pub fn mark_default(
-        ctx: Context<MarkDefault>
+        ctx: Context<instructions::mark_default::MarkDefault>
     ) -> Result<()> {
-        mark_default::mark_default(ctx)
+        instructions::mark_default::mark_default(ctx)
     }
 }
 
