@@ -35,6 +35,17 @@ pub fn attest_invoice_fn(ctx: Context<AttestInvoice>, attestor_sig: [u8; 64]) ->
 #[derive(Accounts)]
 pub struct AttestInvoice<'info> {
     pub attestor: Signer<'info>,
-    #[account(mut, seeds = [b"invoice", invoice.issuer.as_ref(), invoice.mint_pubkey.as_ref()], bump)]
+
+    /// CHECK: seed only
+    pub issuer: UncheckedAccount<'info>,
+
+    /// CHECK: seed only
+    pub invoice_mint: UncheckedAccount<'info>,
+
+    #[account(
+        mut,
+        seeds = [b"invoice", issuer.key().as_ref(), invoice_mint.key().as_ref()],
+        bump
+    )]
     pub invoice: Account<'info, Invoice>,
 }

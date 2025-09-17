@@ -4,7 +4,7 @@ import { Finvoice } from "../target/types/finvoice";
 import { createMint } from "@solana/spl-token";
 import { expect } from "chai";
 
-describe("finvoice", () => {
+describe("initialize_invoice", () => {
   anchor.setProvider(anchor.AnchorProvider.env());
 
   const provider = anchor.getProvider() as anchor.AnchorProvider;
@@ -48,5 +48,4 @@ describe("finvoice", () => {
 
     console.log("initialize_invoice tx:", txSig);
   });
-
 });
