@@ -52,6 +52,7 @@ pub fn buy_invoice_fn(ctx: Context<BuyInvoice>, amount: u64) -> Result<()> {
     );
     require!(ctx.accounts.buyer.key() != invoice.issuer, FinvoiceError::InvalidBuyer);
 
+    // Check if the user wants to pay using an SPL token (like USDC) instead of SOL.
     if ctx.accounts.payment_mint.is_some() {
         let buyer_token_account = ctx.accounts.buyer_token_account.as_ref().ok_or(FinvoiceError::MissingPaymentAccount)?;
         let escrow_token_account = ctx.accounts.escrow_token_account.as_ref().ok_or(FinvoiceError::MissingPaymentAccount)?;

@@ -1,7 +1,7 @@
-use anchor_lang::prelude::*;
-use anchor_spl::token::{Mint};
 use crate::error::FinvoiceError;
 use crate::state::{Invoice, InvoiceStatus};
+use anchor_lang::prelude::*;
+use anchor_spl::token::Mint;
 
 #[event]
 pub struct InvoiceCreated {
@@ -54,12 +54,13 @@ pub fn initialize_invoice_fn(
 }
 
 #[derive(Accounts)]
-#[instruction(payer: Option<Pubkey>, invoice_amount: u64, currency: u16, due_date: i64, ipfs_cid: [u8;46])]
+#[instruction(payer: Pubkey, invoice_amount: u64, currency: u16, due_date: i64, ipfs_cid: [u8;46])]
 pub struct InitializeInvoice<'info> {
     #[account(mut)]
     pub issuer: Signer<'info>,
 
     pub invoice_mint: Account<'info, Mint>,
+
     #[account(
         init,
         payer = issuer,
@@ -69,10 +70,14 @@ pub struct InitializeInvoice<'info> {
     )]
     pub invoice: Account<'info, Invoice>,
 
-    /// CHECK: Escrow vault is a PDA used to hold SOL; we only transfer lamports
-    /// and never read/write structured data. Safety is enforced via signer seeds
-    /// during invoke_signed.
-    #[account(mut)]
+    #[account(
+        mut,
+        seeds = [b"escrow", invoice.key().as_ref()],
+        bump
+    )]
+    /// CHECK: PDA for SOL escrow
     pub escrow_vault: UncheckedAccount<'info>,
+
     pub system_program: Program<'info, System>,
 }
+
